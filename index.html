@@ -98,14 +98,68 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1.概念"></a>1.概念</h2><p>哈希算法（Hash）又称摘要算法（Digest），它的作用是：对任意一组输入数据进行计算，得到一个固定长度的输出摘要。</p>
+<h2 id="2-哈希算法最重要的特点"><a href="#2-哈希算法最重要的特点" class="headerlink" title="2.哈希算法最重要的特点"></a>2.哈希算法最重要的特点</h2><ul>
+<li>相同的输入一定得到相同的输出；</li>
+<li>不同的输入大概率得到不同的输出。<br>哈希算法的目的就是为了验证原始数据是否被篡改。</li>
+</ul>
+<p>Java字符串的hashCode()就是一个哈希算法，它的输入是任意字符串，输出是固定的4字节int整数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;hello&quot;.hashCode(); // 0x5e918d2</span><br><span class="line">&quot;hello, java&quot;.hashCode(); // 0x7a9d88e8</span><br><span class="line">&quot;hello, bob&quot;.hashCode(); // 0xa0dbae2f</span><br></pre></td></tr></table></figure>
+
+<p>两个相同的字符串永远会计算出相同的hashCode，否则基于hashCode定位的HashMap就无法正常工作。这也是为什么当我们自定义一个class时，覆写equals()方法时我们必须正确覆写hashCode()方法。</p>
+<h3 id="哈希碰撞"><a href="#哈希碰撞" class="headerlink" title="哈希碰撞"></a>哈希碰撞</h3><p>哈希碰撞是指，两个不同的输入得到了相同的输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;AaAaAa&quot;.hashCode(); // 0x7460e8c0</span><br><span class="line">&quot;BBAaBB&quot;.hashCode(); // 0x7460e8c0</span><br></pre></td></tr></table></figure>
+<p><strong>碰撞能不能避免?</strong> 答案是不能。碰撞是一定会出现的，因为输出的字节长度是固定的，String的hashCode()输出是4字节整数，最多只有4294967296种输出，但输入的数据长度是不固定的，有无数种输入。所以，哈希算法是把一个无限的输入集合映射到一个有限的输出集合，必然会产生碰撞。</p>
+<p>碰撞不可怕，我们担心的不是碰撞，而是碰撞的概率，因为碰撞概率的高低关系到哈希算法的安全性。</p>
+<p><strong>一个安全的哈希算法必须满足：</strong></p>
+<ul>
+<li>碰撞概率低；</li>
+<li>不能猜测输出。<br>不能猜测输出是指，输入的任意一个bit的变化会造成输出完全不同，这样就很难从输出反推输入（只能依靠暴力穷举）。</li>
+</ul>
+<p>假设一种哈希算法有如下规律：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hashA(&quot;java001&quot;) = &quot;123456&quot;</span><br><span class="line">hashA(&quot;java002&quot;) = &quot;123457&quot;</span><br><span class="line">hashA(&quot;java003&quot;) = &quot;123458&quot;</span><br></pre></td></tr></table></figure>
+<p>那么很容易从输出123459反推输入，这种哈希算法就不安全。安全的哈希算法从输出是看不出任何规律的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hashB(&quot;java001&quot;) = &quot;123456&quot;</span><br><span class="line">hashB(&quot;java002&quot;) = &quot;580271&quot;</span><br><span class="line">hashB(&quot;java003&quot;) = ???</span><br></pre></td></tr></table></figure>
+<h2 id="3-常用哈希算法及输出长度"><a href="#3-常用哈希算法及输出长度" class="headerlink" title="3. 常用哈希算法及输出长度"></a>3. 常用哈希算法及输出长度</h2><ul>
+<li><p>MD5:128 bits=16 bytes (MD5因为输出长度较短，短时间内破解是可能的，目前已经不推荐使用)。</p>
+</li>
+<li><p>SHA-1:160bits/20 bytes (SHA-1是由美国国家安全局开发的，SHA算法实际上是一个系列，包括SHA-0（已废弃）、SHA-1、SHA-256、SHA-512等。)</p>
+</li>
+<li><p>RipeMD-160:160bits/20 bytes</p>
+</li>
+<li><p>SHA-256:256bits/32 bytes</p>
+</li>
+<li><p>SHA-512:512bits/64 bytes</p>
+<pre><code>   Notes:根据碰撞概率，哈希算法的输出长度越长，就越难产生碰撞，也就越安全。
+</code></pre>
+<h2 id="4-用途"><a href="#4-用途" class="headerlink" title="4. 用途"></a>4. 用途</h2></li>
+<li><p>检查文件是否被篡改</p>
+</li>
+<li><p>存储用户口令</p>
+<pre><code>   Notes:用哈希存储口令时要考虑彩虹表攻击(加盐(salt))
+</code></pre>
+<h2 id="5-hash算法实现"><a href="#5-hash算法实现" class="headerlink" title="5. hash算法实现"></a>5. hash算法实现</h2></li>
+<li><p>加法hash</p>
+</li>
+<li><p>乘法hash<br>java中的字符串hash算法(BKDRHash)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Returns a hash code for this string. The hash code for a</span><br><span class="line"> * &#123;@code String&#125; object is computed as</span><br><span class="line"> * &lt;blockquote&gt;&lt;pre&gt;</span><br><span class="line"> * s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]</span><br><span class="line"> * &lt;/pre&gt;&lt;/blockquote&gt;</span><br><span class="line"> * using &#123;@code int&#125; arithmetic, where &#123;@code s[i]&#125; is the</span><br><span class="line"> * &lt;i&gt;i&lt;/i&gt;th character of the string, &#123;@code n&#125; is the length of</span><br><span class="line"> * the string, and &#123;@code ^&#125; indicates exponentiation.</span><br><span class="line"> * (The hash value of the empty string is zero.)</span><br><span class="line"> *</span><br><span class="line"> * @return  a hash code value for this object.</span><br><span class="line"> */</span><br><span class="line">public int hashCode() &#123;</span><br><span class="line">    int h = hash;</span><br><span class="line">    final int len = length();</span><br><span class="line">    if (h == 0 &amp;&amp; len &gt; 0) &#123;</span><br><span class="line">        for (int i = 0; i &lt; len; i++) &#123;</span><br><span class="line">            h = 31 * h + charAt(i);</span><br><span class="line">        &#125;</span><br><span class="line">        hash = h;</span><br><span class="line">    &#125;</span><br><span class="line">    return h;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>为什么使用31作为计算的因子呢？</strong></p>
+<ul>
+<li>选择质数作为乘子，会大大降低hash冲突的概率。质数的值越大，hash冲突率越低</li>
+<li>31参与乘法运算，可以被 JVM 优化，31 * i = (i &lt;&lt; 5) - i</li>
+<li>使用 101 计算 hash code 容易导致整型溢出，导致计算精度丢失</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://littleeyes88.github.io/2021/1H8CMGG.html" data-id="cktl8l5lk00009hit994ifs2j" data-title="Hash算法简介" class="article-share-link">分享</a>
+      <a data-url="https://littleeyes88.github.io/2021/1H8CMGG.html" data-id="cktlakwx90000hiit0idsewwy" data-title="Hash算法简介" class="article-share-link">分享</a>
       
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
+
     </footer>
   </div>
   
@@ -153,7 +207,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://littleeyes88.github.io/2021/151FCAP.html" data-id="cktl8l5lp00019hit7w196jvi" data-title="Hello World" class="article-share-link">分享</a>
+      <a data-url="https://littleeyes88.github.io/2021/151FCAP.html" data-id="cktlakwxe0001hiitcrwq1ys0" data-title="Hello World" class="article-share-link">分享</a>
       
       
       
@@ -175,9 +229,23 @@
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/java/" style="font-size: 10px;">java</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
