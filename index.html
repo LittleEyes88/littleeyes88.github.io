@@ -250,7 +250,7 @@
 </tr>
 </tbody></table>
 <p>加盐的目的在于使黑客的彩虹表失效，即使用户使用常用口令，也无法从MD5反推原始口令。<br>通过这样的方式，增加了反向查询的复杂度。<br>但是这样的方式也不是万无一失，如果发生了盐被泄露的问题，就需要所有用到的地方来重置密码。针对salt泄露的问题，其实还有一种解决办法，即使用<strong>HMAC进行加密（Hash-based Message Authentication Code）</strong>。这种算法的核心思路是加密使用的key是从服务器端获取的，每一个用户的是不一样的。如果发生了泄露，那么也就是这一个用户的会被泄露，不会影响到全局。</p>
-<h3 id="4-3-负载均衡"><a href="#4-3-负载均衡" class="headerlink" title="4.3 负载均衡"></a>4.3 负载均衡</h3><p>活动开发同学在应对高星级业务大用户量参与时，都会使用分库分表，针对用户的openid进行hashtime33取模，就可以得到对应的用户分库分表的节点了。<br><img src="/imgs/load_balance.png" alt="活动分库分表示意图"></p>
+<h3 id="4-3-负载均衡"><a href="#4-3-负载均衡" class="headerlink" title="4.3 负载均衡"></a>4.3 负载均衡</h3><p>活动开发同学在应对高星级业务大用户量参与时，都会使用分库分表，针对用户的openid进行hashtime33取模，就可以得到对应的用户分库分表的节点了。<br><img src="/./imgs/load_balance.png" alt="活动分库分表示意图"></p>
 <center>活动分库分表示意图</center>
 如上图所示，这里其实是分了10张表，openid计算后的hash值取模10，得到对应的分表，在进行后续处理就好。对于一般的活动或者系统，我们一般设置10张表或者100张表就好。
  
@@ -370,9 +370,7 @@ hash能极大程度地避免冲突，但是冲突是在所难免的。所以无�
     <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>11111111<br>&lt;% asset_img load_balance.png %&gt;</p>
-<p>2222222<br><img src="/./imgs/load_balance.png"></p>
-<h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
