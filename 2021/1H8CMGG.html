@@ -13,20 +13,20 @@
 <meta property="og:site_name" content="Yanqiong&#39;s Blog">
 <meta property="og:description" content="1.概念哈希算法（Hash）又称摘要算法（Digest），它的作用是：对任意一组输入数据进行计算，得到一个固定长度的输出摘要。 2.哈希算法最重要的特点 相同的输入一定得到相同的输出； 不同的输入大概率得到不同的输出。哈希算法的目的就是为了验证原始数据是否被篡改。  Java字符串的hashCode()就是一个哈希算法，它的输入是任意字符串，输出是固定的4字节int整数： 123&quot;hel">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://littleeyes88.github.io/2021/android_studio_downloads.png">
-<meta property="og:image" content="https://littleeyes88.github.io/2021/studio_local_sha256.png">
-<meta property="og:image" content="https://littleeyes88.github.io/2021/load_balance.png">
-<meta property="og:image" content="https://littleeyes88.github.io/2021/origin_capacity.jpeg">
-<meta property="og:image" content="https://littleeyes88.github.io/2021/reduce_capacity.jpeg">
-<meta property="og:image" content="https://littleeyes88.github.io/2021/expand_capacity.jpeg">
-<meta property="og:image" content="https://littleeyes88.github.io/2021/expand_capacity2.jpeg">
+<meta property="og:image" content="https://littleeyes88.github.io/imgs/android_studio_downloads.png">
+<meta property="og:image" content="https://littleeyes88.github.io/imgs/studio_local_sha256.png">
+<meta property="og:image" content="https://littleeyes88.github.io/imgs/load_balance.png">
+<meta property="og:image" content="https://littleeyes88.github.io/imgs/origin_capacity.jpeg">
+<meta property="og:image" content="https://littleeyes88.github.io/imgs/reduce_capacity.jpeg">
+<meta property="og:image" content="https://littleeyes88.github.io/imgs/expand_capacity.jpeg">
+<meta property="og:image" content="https://littleeyes88.github.io/imgs/expand_capacity2.jpeg">
 <meta property="article:published_time" content="2021-09-15T07:23:15.000Z">
-<meta property="article:modified_time" content="2021-09-22T07:43:16.407Z">
+<meta property="article:modified_time" content="2021-09-22T07:52:59.942Z">
 <meta property="article:author" content="yanqiong">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://littleeyes88.github.io/2021/android_studio_downloads.png">
+<meta name="twitter:image" content="https://littleeyes88.github.io/imgs/android_studio_downloads.png">
   
     <link rel="alternate" href="/atom.xml" title="Yanqiong's Blog" type="application/atom+xml">
   
@@ -165,10 +165,9 @@
 </code></pre>
 <h2 id="4-用途"><a href="#4-用途" class="headerlink" title="4. 用途"></a>4. 用途</h2><h3 id="4-1-数据校验"><a href="#4-1-数据校验" class="headerlink" title="4.1 数据校验"></a>4.1 数据校验</h3><p>比如，比较网站上标明的hash值和下载后的hash值，相同则下载正确；否则，说明文件已被篡改。<br>以下是android studio官网下载页面:</p>
 
-
-
-<p><img src="/2021/android_studio_downloads.png"></p>
-<p>下载Mac(64bit后)查看文件的SHA256值：<br><img src="/2021/studio_local_sha256.png"><br>两者一样，说明没被修改、</p>
+<hr>
+<p><img src="/./imgs/android_studio_downloads.png"></p>
+<p>下载Mac(64bit后)查看文件的SHA256值：<br><img src="/./imgs/studio_local_sha256.png"><br>两者一样，说明没被修改、</p>
 <p>又比如 git commit id,视频网站的版权校验，大文件分块校验等。</p>
 <h3 id="4-2-信息加密"><a href="#4-2-信息加密" class="headerlink" title="4.2 信息加密"></a>4.2 信息加密</h3><p>如图存储用户名和口令的数据库表，存储的是用户口令的MD5</p>
 <table>
@@ -265,12 +264,12 @@
 </tr>
 </tbody></table>
 <p>加盐的目的在于使黑客的彩虹表失效，即使用户使用常用口令，也无法从MD5反推原始口令。<br>通过这样的方式，增加了反向查询的复杂度。<br>但是这样的方式也不是万无一失，如果发生了盐被泄露的问题，就需要所有用到的地方来重置密码。针对salt泄露的问题，其实还有一种解决办法，即使用<strong>HMAC进行加密（Hash-based Message Authentication Code）</strong>。这种算法的核心思路是加密使用的key是从服务器端获取的，每一个用户的是不一样的。如果发生了泄露，那么也就是这一个用户的会被泄露，不会影响到全局。</p>
-<h3 id="4-3-负载均衡"><a href="#4-3-负载均衡" class="headerlink" title="4.3 负载均衡"></a>4.3 负载均衡</h3><p>活动开发同学在应对高星级业务大用户量参与时，都会使用分库分表，针对用户的openid进行hashtime33取模，就可以得到对应的用户分库分表的节点了。<br><img src="/2021/load_balance.png"></p>
+<h3 id="4-3-负载均衡"><a href="#4-3-负载均衡" class="headerlink" title="4.3 负载均衡"></a>4.3 负载均衡</h3><p>活动开发同学在应对高星级业务大用户量参与时，都会使用分库分表，针对用户的openid进行hashtime33取模，就可以得到对应的用户分库分表的节点了。<br><img src="/./imgs/load_balance.png"></p>
 <center>活动分库分表示意图</center>
 如上图所示，这里其实是分了10张表，openid计算后的hash值取模10，得到对应的分表，在进行后续处理就好。对于一般的活动或者系统，我们一般设置10张表或者100张表就好。
  
 <p>下面我们来看一点复杂的问题，假设我们活动初始分表了10张，运营一段时间以后发现需要10张不够，需要改到100张。这个时候我们如果直接扩容的话，那么所有的数据都需要重新计算Hash值，大量的数据都需要进行迁移。如果更新的是缓存的逻辑，则会导致大量缓存失效，发生雪崩效应，导致数据库异常。造成这种问题的原因是hash算法本身的缘故，只要是取模算法进行处理，则无法避免这种情况。针对这种问题，我们就需要利用一致性hash进行相应的处理了。</p>
-<p><strong>一致性hash的基本原理</strong>是将输入的值hash后，对结果的hash值进行2^32取模，这里和普通的hash取模算法不一样的点是在一致性hash算法里将取模的结果映射到一个环上。将缓存服务器与被缓存对象都映射到hash环上以后，从被缓存对象的位置出发，沿顺时针方向遇到的第一个服务器，就是当前对象将要缓存于的服务器，由于被缓存对象与服务器hash后的值是固定的，所以，在服务器不变的情况下，一个openid必定会被缓存到固定的服务器上，那么，当下次想要访问这个用户的数据时，只要再次使用相同的算法进行计算，即可算出这个用户的数据被缓存在哪个服务器上，直接去对应的服务器查找对应的数据即可。这里的逻辑其实和直接取模的是一样的。如下图所示：<br><img src="/2021/origin_capacity.jpeg"></p>
+<p><strong>一致性hash的基本原理</strong>是将输入的值hash后，对结果的hash值进行2^32取模，这里和普通的hash取模算法不一样的点是在一致性hash算法里将取模的结果映射到一个环上。将缓存服务器与被缓存对象都映射到hash环上以后，从被缓存对象的位置出发，沿顺时针方向遇到的第一个服务器，就是当前对象将要缓存于的服务器，由于被缓存对象与服务器hash后的值是固定的，所以，在服务器不变的情况下，一个openid必定会被缓存到固定的服务器上，那么，当下次想要访问这个用户的数据时，只要再次使用相同的算法进行计算，即可算出这个用户的数据被缓存在哪个服务器上，直接去对应的服务器查找对应的数据即可。这里的逻辑其实和直接取模的是一样的。如下图所示：<br><img src="/./imgs/origin_capacity.jpeg"></p>
 <center>初始3台机器的情况</center>
 初始情况如下：用户1的数据在服务器A里，用户2、3的数据存在服务器C里，用户4的数据存储在服务器B里
 
@@ -278,19 +277,19 @@
 <ul>
 <li>服务器缩容</li>
 </ul>
-<p><img src="/2021/reduce_capacity.jpeg"></p>
+<p><img src="/./imgs/reduce_capacity.jpeg"></p>
 <center> 服务器缩容</center>
 服务器B发生了故障，进行剔除后，只有用户4的数据发生了异常。这个时候我们需要继续按照顺时针的方案，把缓存的数据放在用户A上面。
 
 <ul>
-<li>服务器扩容<br><img src="/2021/expand_capacity.jpeg"></li>
+<li>服务器扩容<br><img src="/./imgs/expand_capacity.jpeg"></li>
 </ul>
 <center>服务器扩容示意图</center>
 
 <ul>
 <li>虚拟节点虚拟节点的方案。虚拟节点是实际节点（实际的物理服务器）在hash环上的复制品，一个实际节点可以对应多个虚拟节点。虚拟节点越多，hash环上的节点就越多，数据被均匀分布的概率就越大。</li>
 </ul>
-<p><img src="/2021/expand_capacity2.jpeg"></p>
+<p><img src="/./imgs/expand_capacity2.jpeg"></p>
 <center>虚拟节点示意图</center>
 如右图所示，B、C、D 是原始节点复制出来的虚拟节点，原本都要访问机器D的用户1、4，分别被映射到了B,D。通过这样的方式，起到了一个服务器均匀分布的作用。
 
