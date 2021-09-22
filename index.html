@@ -152,8 +152,8 @@
      2. SHA-1是由美国国家安全局开发的，SHA算法实际上是一个系列，包括SHA-0（已废弃）、SHA-1、SHA-256、SHA-512等
      3. 根据碰撞概率，哈希算法的输出长度越长，就越难产生碰撞，也就越安全
 </code></pre>
-<h2 id="4-用途"><a href="#4-用途" class="headerlink" title="4. 用途"></a>4. 用途</h2><h3 id="4-1-数据校验"><a href="#4-1-数据校验" class="headerlink" title="4.1 数据校验"></a>4.1 数据校验</h3><p>比如，比较网站上标明的hash值和下载后的hash值，相同则下载正确；否则，说明文件已被篡改。<br>以下是android studio官网下载页面:<br><img src="/./imgs/android_studio_downloads.png"></p>
-<p>下载Mac(64bit后)查看文件的SHA256值：<br><img src="/./imgs/studio_local_sha256.png"><br>两者一样，说明没被修改、</p>
+<h2 id="4-用途"><a href="#4-用途" class="headerlink" title="4. 用途"></a>4. 用途</h2><h3 id="4-1-数据校验"><a href="#4-1-数据校验" class="headerlink" title="4.1 数据校验"></a>4.1 数据校验</h3><p>比如，比较网站上标明的hash值和下载后的hash值，相同则下载正确；否则，说明文件已被篡改。<br>以下是android studio官网下载页面:<br><img src="./imgs/android_studio_downloads.png"></p>
+<p>下载Mac(64bit后)查看文件的SHA256值：<br><img src="./imgs/studio_local_sha256.png"><br>两者一样，说明没被修改、</p>
 <p>又比如 git commit id,视频网站的版权校验，大文件分块校验等。</p>
 <h3 id="4-2-信息加密"><a href="#4-2-信息加密" class="headerlink" title="4.2 信息加密"></a>4.2 信息加密</h3><p>如图存储用户名和口令的数据库表，存储的是用户口令的MD5</p>
 <table>
@@ -218,9 +218,9 @@
 <td></td>
 </tr>
 </tbody></table>
-<p>bob的MD5：<font color="Red">f30aa7a662c728b7407c54ae6bfd27d1</font>，原始口令：<font color="Red">hello123</font>；</p>
-<p>alice的MD5：<font color="Red">25d55ad283aa400af464c76d713c07ad</font>，原始口令：<font color="Red">12345678</font>；</p>
-<p>tim的MD5：<font color="Red">bed128365216c019988915ed3add75fb</font>，原始口令：<font color="Red">passw0rd</font>。</p>
+<p>bob的MD5：<font color=Red>f30aa7a662c728b7407c54ae6bfd27d1</font>，原始口令：<font color=Red>hello123</font>；</p>
+<p>alice的MD5：<font color=Red>25d55ad283aa400af464c76d713c07ad</font>，原始口令：<font color=Red>12345678</font>；</p>
+<p>tim的MD5：<font color=Red>bed128365216c019988915ed3add75fb</font>，原始口令：<font color=Red>passw0rd</font>。</p>
 <p>这就是为什么不要使用常用密码，以及不要使用生日作为密码的原因。</p>
 <p>即使用户使用了常用口令，我们也可以采取措施来抵御彩虹表攻击，方法是对每个口令额外添加随机数，这个方法称之为<strong>加盐（salt）</strong>：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">digest = md5(salt+inputPassword)</span><br></pre></td></tr></table></figure>
@@ -250,12 +250,12 @@
 </tr>
 </tbody></table>
 <p>加盐的目的在于使黑客的彩虹表失效，即使用户使用常用口令，也无法从MD5反推原始口令。<br>通过这样的方式，增加了反向查询的复杂度。<br>但是这样的方式也不是万无一失，如果发生了盐被泄露的问题，就需要所有用到的地方来重置密码。针对salt泄露的问题，其实还有一种解决办法，即使用<strong>HMAC进行加密（Hash-based Message Authentication Code）</strong>。这种算法的核心思路是加密使用的key是从服务器端获取的，每一个用户的是不一样的。如果发生了泄露，那么也就是这一个用户的会被泄露，不会影响到全局。</p>
-<h3 id="4-3-负载均衡"><a href="#4-3-负载均衡" class="headerlink" title="4.3 负载均衡"></a>4.3 负载均衡</h3><p>活动开发同学在应对高星级业务大用户量参与时，都会使用分库分表，针对用户的openid进行hashtime33取模，就可以得到对应的用户分库分表的节点了。<br><img src="/./imgs/load_balance.png"></p>
+<h3 id="4-3-负载均衡"><a href="#4-3-负载均衡" class="headerlink" title="4.3 负载均衡"></a>4.3 负载均衡</h3><p>活动开发同学在应对高星级业务大用户量参与时，都会使用分库分表，针对用户的openid进行hashtime33取模，就可以得到对应的用户分库分表的节点了。<br><img src="./imgs/load_balance.png" alt="活动分库分表示意图"></p>
 <center>活动分库分表示意图</center>
 如上图所示，这里其实是分了10张表，openid计算后的hash值取模10，得到对应的分表，在进行后续处理就好。对于一般的活动或者系统，我们一般设置10张表或者100张表就好。
  
 <p>下面我们来看一点复杂的问题，假设我们活动初始分表了10张，运营一段时间以后发现需要10张不够，需要改到100张。这个时候我们如果直接扩容的话，那么所有的数据都需要重新计算Hash值，大量的数据都需要进行迁移。如果更新的是缓存的逻辑，则会导致大量缓存失效，发生雪崩效应，导致数据库异常。造成这种问题的原因是hash算法本身的缘故，只要是取模算法进行处理，则无法避免这种情况。针对这种问题，我们就需要利用一致性hash进行相应的处理了。</p>
-<p><strong>一致性hash的基本原理</strong>是将输入的值hash后，对结果的hash值进行2^32取模，这里和普通的hash取模算法不一样的点是在一致性hash算法里将取模的结果映射到一个环上。将缓存服务器与被缓存对象都映射到hash环上以后，从被缓存对象的位置出发，沿顺时针方向遇到的第一个服务器，就是当前对象将要缓存于的服务器，由于被缓存对象与服务器hash后的值是固定的，所以，在服务器不变的情况下，一个openid必定会被缓存到固定的服务器上，那么，当下次想要访问这个用户的数据时，只要再次使用相同的算法进行计算，即可算出这个用户的数据被缓存在哪个服务器上，直接去对应的服务器查找对应的数据即可。这里的逻辑其实和直接取模的是一样的。如下图所示：<br><img src="/./imgs/origin_capacity.jpeg"></p>
+<p><strong>一致性hash的基本原理</strong>是将输入的值hash后，对结果的hash值进行2^32取模，这里和普通的hash取模算法不一样的点是在一致性hash算法里将取模的结果映射到一个环上。将缓存服务器与被缓存对象都映射到hash环上以后，从被缓存对象的位置出发，沿顺时针方向遇到的第一个服务器，就是当前对象将要缓存于的服务器，由于被缓存对象与服务器hash后的值是固定的，所以，在服务器不变的情况下，一个openid必定会被缓存到固定的服务器上，那么，当下次想要访问这个用户的数据时，只要再次使用相同的算法进行计算，即可算出这个用户的数据被缓存在哪个服务器上，直接去对应的服务器查找对应的数据即可。这里的逻辑其实和直接取模的是一样的。如下图所示：<br><img src="./imgs/origin_capacity.jpeg"></p>
 <center>初始3台机器的情况</center>
 初始情况如下：用户1的数据在服务器A里，用户2、3的数据存在服务器C里，用户4的数据存储在服务器B里
 
@@ -263,19 +263,19 @@
 <ul>
 <li>服务器缩容</li>
 </ul>
-<p><img src="/./imgs/reduce_capacity.jpeg"></p>
+<p><img src="./imgs/reduce_capacity.jpeg"></p>
 <center> 服务器缩容</center>
 服务器B发生了故障，进行剔除后，只有用户4的数据发生了异常。这个时候我们需要继续按照顺时针的方案，把缓存的数据放在用户A上面。
 
 <ul>
-<li>服务器扩容<br><img src="/./imgs/expand_capacity.jpeg"></li>
+<li>服务器扩容<br><img src="./imgs/expand_capacity.jpeg"></li>
 </ul>
 <center>服务器扩容示意图</center>
 
 <ul>
 <li>虚拟节点虚拟节点的方案。虚拟节点是实际节点（实际的物理服务器）在hash环上的复制品，一个实际节点可以对应多个虚拟节点。虚拟节点越多，hash环上的节点就越多，数据被均匀分布的概率就越大。</li>
 </ul>
-<p><img src="/./imgs/expand_capacity2.jpeg"></p>
+<p><img src="./imgs/expand_capacity2.jpeg"></p>
 <center>虚拟节点示意图</center>
 如右图所示，B、C、D 是原始节点复制出来的虚拟节点，原本都要访问机器D的用户1、4，分别被映射到了B,D。通过这样的方式，起到了一个服务器均匀分布的作用。
 
@@ -337,8 +337,6 @@ hash能极大程度地避免冲突，但是冲突是在所难免的。所以无�
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
-
     </footer>
   </div>
   
@@ -370,9 +368,9 @@ hash能极大程度地避免冲突，但是冲突是在所难免的。所以无�
     <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><!-- <% asset_img load_balance.png %> -->
-<h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><!-- <img src="/2021/09/15/hello-world/load_balance.png" width="500" height="600"></img> -->
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>11111111<br>&lt;% asset_img load_balance.png %&gt;</p>
+<p>2222222<br><img src="/./imgs/load_balance.png"></p>
+<h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
@@ -410,23 +408,9 @@ hash能极大程度地避免冲突，但是冲突是在所难免的。所以无�
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
-    </div>
-  </div>
-
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a>
-    </div>
-  </div>
-
   
     
   <div class="widget-wrap">
